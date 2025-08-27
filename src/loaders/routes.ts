@@ -1,14 +1,15 @@
 /**
  * @file src/loaders/routes.ts
- * @description Routeur principal "/api" : monte toutes les sous-routes.
+ * @description Routeur principal "/api".
  */
 import { Router } from 'express';
 import healthRoutes from '@/routes/health.routes';
-import rbacRoutes from '@/routes/rbac.routes';
 import meRoutes from '@/routes/me.routes';
 import authRoutes from '@/routes/auth.routes';
+import rbacRoutes from '@/routes/rbac.routes';
 import docsRoutes from '@/routes/docs.routes';
-import auditRoutes from '@/routes/audit.routes';
+import roomTypesRoutes from '@/routes/room-types.routes';
+import roomsRoutes from '@/routes/rooms.routes';
 
 const router = Router();
 
@@ -17,9 +18,9 @@ function buildRouter() {
   router.use('/me', meRoutes);
   router.use('/auth', authRoutes);
   router.use('/rbac', rbacRoutes);
-  router.use('/docs', docsRoutes); // UI + JSON
-  router.use('/audit', auditRoutes);
-  
+  router.use('/room-types', roomTypesRoutes);
+  router.use('/rooms', roomsRoutes);
+  router.use('/docs', docsRoutes);
   return router;
 }
 

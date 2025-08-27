@@ -20,8 +20,8 @@ export async function listPermissions(_req: Request, res: Response) {
 export async function createPermission(req: Request, res: Response) {
   const { name, code, resource, action } = req.body as { name: string; code?: string; resource?: string; action?: string; };
   let finalCode = code ? toSystemCode(code) : undefined;
-  if (!finalCode && resource && action) finalCode = permissionCode(resource, action);
-  if (!finalCode) finalCode = toSystemCode(name, 'perm');
+  if (!finalCode && resource && action) finalCode = permissionCode(resource, action as any);
+  if (!finalCode) finalCode = toSystemCode(name, { prefix: 'perm' });
   const perm = await Permission.create({ name, code: finalCode });
   res.status(201).json(perm);
 }
