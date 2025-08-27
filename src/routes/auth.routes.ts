@@ -1,14 +1,31 @@
 /**
  * @file src/routes/auth.routes.ts
- * @description Routes d'authentification (login).
+ * @description Routes d'authentification : register, login, logout, forgot/reset, refresh.
  */
-
 import { Router } from 'express';
-import { login } from '@/controllers/auth.controller';
 import { validate } from '@/middleware/validate';
-import { loginSchema } from '@/validation/auth.schema';
+import { register, login, logout, forgotPassword, resetPassword, refresh } from '@/controllers/auth.controller';
+import { registerSchema, loginSchema, logoutSchema, forgotSchema, resetSchema, refreshSchema } from '@/validation/auth.schema';
+import { loginLimiter, registerLimiter, forgotLimiter } from '@/middleware/rateLimit';
 
 const r = Router();
-r.post('/login', validate(loginSchema), login);
+
+// Register (limité)
+r.post('/register', registerLimiter, validate(registerSchema), register);
+
+// Login (limité)
+r.post('/login', loginLimiter, validate(loginSchema), login);
+
+// Logout (révoque un refresh)
+r.post('/logout', validate(logoutSchema), logout);
+
+// Forgot-password (limité)
+r.post('/forgot-password', forgotLimiter, validate(forgotSchema), forgotPassword);
+
+// Reset-password
+r.post('/reset-password', validate(resetSchema), resetPassword);
+
+// Refresh (rotation + nouveau access)
+r.post('/refresh', validate(refreshSchema), refresh);
 
 export default r;
