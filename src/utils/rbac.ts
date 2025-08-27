@@ -5,6 +5,7 @@
  */
 
 export type RbacAction = 'view' | 'create' | 'update' | 'delete' | 'export';
+export const PERM_ROOMS_EXPORT = permissionCode('rooms', 'export');
 
 /* ===========================
  *  Normalisation / génération
