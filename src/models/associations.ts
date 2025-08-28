@@ -21,9 +21,34 @@ import RefreshToken from '@/models/RefreshToken';
 import PasswordReset from '@/models/PasswordReset';
 import ActionLog from '@/models/ActionLog';
 import RoomType from '@/models/RoomType';
+import RatePlan from '@/models/RatePlan';
+import RatePlanPrice from '@/models/RatePlanPrice';
+import RateRestriction from '@/models/RateRestriction';
 import Room from '@/models/Room';
+import Reservation from '@/models/Reservation';
+import ReservationRoom from '@/models/ReservationRoom';
 
 let registered = false;
+
+// Réservation ↔ Lignes
+Reservation.hasMany(ReservationRoom, { as: 'rooms', foreignKey: 'reservation_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+ReservationRoom.belongsTo(Reservation, { as: 'reservation', foreignKey: 'reservation_id' });
+
+// Lignes ↔ référentiels
+ReservationRoom.belongsTo(RoomType, { as: 'roomType', foreignKey: 'room_type_id' });
+ReservationRoom.belongsTo(Room, { as: 'room', foreignKey: 'room_id' });
+ReservationRoom.belongsTo(RatePlan, { as: 'ratePlan', foreignKey: 'rate_plan_id' });
+
+// PMS Tarifs
+RatePlan.belongsTo(RoomType, { foreignKey: 'room_type_id', as: 'roomType', onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+RoomType.hasMany(RatePlan, { foreignKey: 'room_type_id', as: 'ratePlans' });
+
+RatePlan.hasMany(RatePlanPrice, { foreignKey: 'rate_plan_id', as: 'prices', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+RatePlanPrice.belongsTo(RatePlan, { foreignKey: 'rate_plan_id', as: 'ratePlan' });
+
+RatePlan.hasMany(RateRestriction, { foreignKey: 'rate_plan_id', as: 'restrictions', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+RateRestriction.belongsTo(RatePlan, { foreignKey: 'rate_plan_id', as: 'ratePlan' });
+
 
 /**
  * Enregistre les associations (idempotent).

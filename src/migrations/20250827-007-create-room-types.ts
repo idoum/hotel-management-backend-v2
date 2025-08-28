@@ -11,8 +11,8 @@ export async function up(q: QueryInterface) {
     name: { type: DataTypes.STRING(150), allowNull: false },
     description: { type: DataTypes.TEXT, allowNull: true },
     features: { type: DataTypes.JSON, allowNull: true },
-    created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: (q.sequelize as any).literal('CURRENT_TIMESTAMP') },
-    updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: (q.sequelize as any).literal('CURRENT_TIMESTAMP') }
+    created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+    updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
   });
   await q.addIndex('room_types', ['name'], { name: 'ix_room_types_name' } as any);
 }

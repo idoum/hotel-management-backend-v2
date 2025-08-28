@@ -12,6 +12,16 @@ import '@/models/Role';
 import '@/models/Permission';
 import '@/models/UserRole';
 import '@/models/RolePermission';
+import '@/models/RefreshToken';
+import '@/models/PasswordReset';
+import '@/models/ActionLog';
+import '@/models/RoomType';
+import '@/models/RatePlan';
+import '@/models/RatePlanPrice';
+import '@/models/RateRestriction';
+import '@/models/Room';
+import '@/models/Reservation';
+import '@/models/ReservationRoom';
 
 import { registerAssociations } from '@/models/associations';
 

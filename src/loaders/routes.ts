@@ -10,6 +10,10 @@ import rbacRoutes from '@/routes/rbac.routes';
 import docsRoutes from '@/routes/docs.routes';
 import roomTypesRoutes from '@/routes/room-types.routes';
 import roomsRoutes from '@/routes/rooms.routes';
+import ratePlansRoutes from '@/routes/rate-plans.routes';
+import ratesRoutes from '@/routes/rates.routes';
+import availabilityRoutes from '@/routes/availability.routes';
+import reservationsRoutes from '@/routes/reservations.routes';
 
 const router = Router();
 
@@ -21,6 +25,10 @@ function buildRouter() {
   router.use('/room-types', roomTypesRoutes);
   router.use('/rooms', roomsRoutes);
   router.use('/docs', docsRoutes);
+  router.use('/rate-plans', ratePlansRoutes);
+  router.use('/rates', ratesRoutes);
+  router.use('/availability', availabilityRoutes);
+  router.use('/reservations', reservationsRoutes);
   return router;
 }
 

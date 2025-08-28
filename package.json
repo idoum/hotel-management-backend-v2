@@ -16,11 +16,14 @@
     "db:migrate:auth": "tsx -r tsconfig-paths/register src/scripts/migrate-auth-extras.ts",
     "db:migrate": "tsx -r tsconfig-paths/register src/scripts/migrate.ts",
     "db:migrate:down": "tsx -r tsconfig-paths/register src/scripts/migrate-down.ts",
-    "db:migrate:status": "tsx -r tsconfig-paths/register src/scripts/migrate-status.ts"
+    "db:migrate:status": "tsx -r tsconfig-paths/register src/scripts/migrate-status.ts",
+    "db:status": "tsx -r tsconfig-paths/register src/scripts/migrate-status.ts",
+    "db:sync-dev": "tsx -r tsconfig-paths/register src/scripts/sync-dev.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
