@@ -18,10 +18,12 @@
     "db:migrate:down": "tsx -r tsconfig-paths/register src/scripts/migrate-down.ts",
     "db:migrate:status": "tsx -r tsconfig-paths/register src/scripts/migrate-status.ts",
     "db:status": "tsx -r tsconfig-paths/register src/scripts/migrate-status.ts",
-    "db:sync-dev": "tsx -r tsconfig-paths/register src/scripts/sync-dev.ts"
+    "db:sync-dev": "tsx -r tsconfig-paths/register src/scripts/sync-dev.ts",
+    "db:seed:security": "tsx -r tsconfig-paths/register src/scripts/seed-security.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "dotenv": "^17.2.1",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.14",

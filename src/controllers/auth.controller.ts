@@ -166,23 +166,51 @@ export async function resetPassword(req: Request, res: Response) {
 /** Refresh: rotation du refresh token */
 export async function refresh(req: Request, res: Response) {
   const log = withReq(req);
-  const { refreshToken } = req.body as { refreshToken: string };
-  if (!refreshToken) return res.status(400).json({ message: 'Missing refreshToken' });
 
-  const exchanged = await exchangeRefreshToken(refreshToken);
-  if (!exchanged) {
-    log.warn('auth.refresh.failure.invalid');
-    return res.status(401).json({ message: 'Invalid or expired refresh token' });
+  // ✅ ne plante pas si req.body est undefined
+  const body = (req.body ?? {}) as { refreshToken?: string };
+  // ✅ accepte aussi en cookie si tu utilises httpOnly cookies côté front
+  const refreshToken = body.refreshToken ?? (req as any).cookies?.refreshToken;
+
+  if (!refreshToken) {
+    log.warn('auth.refresh.missing_body_or_cookie');
+    return res.status(400).json({ message: 'Missing refreshToken' });
   }
 
-  const { userId, token: newRefresh, expAt } = exchanged;
-  const [roles, permissions, user] = await Promise.all([
-    getUserRoleCodes(userId),
-    getUserPermissionCodes(userId),
-    User.findByPk(userId, { attributes: ['email'] })
-  ]);
-  const accessToken = issueAccessToken({ sub: userId, email: user?.email || '', roles, permissions });
+  try {
+    const exchanged = await exchangeRefreshToken(refreshToken);
+    if (!exchanged) {
+      log.warn('auth.refresh.failure.invalid');
+      return res.status(401).json({ message: 'Invalid or expired refresh token' });
+    }
 
-  log.info({ userId }, 'auth.refresh.success');
-  return res.json({ accessToken, refreshToken: newRefresh, refreshExpAt: expAt.toISOString() });
-}
+    const { userId, token: newRefresh, expAt } = exchanged;
+
+    const [roles, permissions, user] = await Promise.all([
+      getUserRoleCodes(userId),
+      getUserPermissionCodes(userId),
+      User.findByPk(userId, { attributes: ['email'] })
+    ]);
+
+    const accessToken = issueAccessToken({
+      sub: userId,
+      email: user?.email || '',
+      roles,
+      permissions
+    });
+
+    log.info({ userId }, 'auth.refresh.success');
+
+    // Option: renvoyer le refresh en cookie httpOnly sécurisé si tu veux
+    // res.cookie('refreshToken', newRefresh, { httpOnly: true, secure: true, sameSite: 'strict', expires: expAt });
+
+    return res.json({
+      accessToken,
+      refreshToken: newRefresh,
+      refreshExpAt: expAt.toISOString()
+    });
+  } catch (e: any) {
+    log.error({ err: e }, 'auth.refresh.unexpected_error');
+    return res.status(500).json({ message: 'Refresh failed' });
+  }
+} 
