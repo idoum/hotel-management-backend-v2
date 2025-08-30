@@ -8,6 +8,7 @@ import { requireAuth } from '@/middleware/requireAuth';
 import { requirePermission } from '@/middleware/requirePermission';
 import { PERM_RBAC_MANAGE } from '@/utils/rbac';
 
+
 const r = Router();
 
 r.get('/', requireAuth, requirePermission(PERM_RBAC_MANAGE), async (req, res) => {
@@ -15,5 +16,6 @@ r.get('/', requireAuth, requirePermission(PERM_RBAC_MANAGE), async (req, res) =>
   const rows = await ActionLog.findAll({ order: [['id', 'DESC']], limit });
   res.json(rows);
 });
+
 
 export default r;

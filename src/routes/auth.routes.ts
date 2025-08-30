@@ -7,6 +7,9 @@ import { validate } from '@/middleware/validate';
 import { register, login, logout, forgotPassword, resetPassword, refresh } from '@/controllers/auth.controller';
 import { registerSchema, loginSchema, logoutSchema, forgotSchema, resetSchema, refreshSchema } from '@/validation/auth.schema';
 import { loginLimiter, registerLimiter, forgotLimiter } from '@/middleware/rateLimit';
+import { changePassword } from '@/controllers/auth.controller';
+import { changePasswordSchema } from '@/validation/auth.schema';
+import { requireAuth } from '@/middleware/auth';
 
 const r = Router();
 
@@ -27,5 +30,8 @@ r.post('/reset-password', validate(resetSchema), resetPassword);
 
 // Refresh (rotation + nouveau access)
 r.post('/refresh', validate(refreshSchema), refresh);
+
+r.post('/change-password', requireAuth,  changePassword);
+
 
 export default r;
