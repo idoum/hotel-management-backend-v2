@@ -8,6 +8,7 @@ import Permission from "@/models/Permission";
 import UserRole from "@/models/UserRole";
 import RolePermission from "@/models/RolePermission";
 import { uniqueStrings } from "@/utils/rbac";
+import sequelize from "@/config/db";
 
 /**
  * getUserRoleCodes
@@ -115,4 +116,89 @@ export async function attachPermissionToRole(roleId: number, permissionId: numbe
  */
 export async function detachPermissionFromRole(roleId: number, permissionId: number): Promise<void> {
   await RolePermission.destroy({ where: { role_id: roleId, permission_id: permissionId } });
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         Helpers alignés aux nouveaux UI                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * getRolePermissions
+ * @description Returns the permissions assigned to a given role (id, code, name).
+ * @param roleId number
+ */
+export async function getRolePermissions(roleId: number): Promise<Permission[]> {
+  const role = await Role.findByPk(roleId, {
+    attributes: ["id", "code", "name"],
+    include: [
+      {
+        association: Role.associations.permissions!,
+        attributes: ["id", "code", "name"],
+        through: { attributes: [] },
+        required: false
+      }
+    ]
+  });
+  if (!role) return [];
+  // @ts-ignore
+  return ((role as any).permissions as Permission[] | undefined) ?? [];
+}
+
+/**
+ * replaceRolePermissions
+ * @description Replaces (idempotently) the set of permissions for a role.
+ * @param roleId number
+ * @param permissionIds number[]
+ * @returns Updated list of Permission rows for the role
+ */
+export async function replaceRolePermissions(roleId: number, permissionIds: number[]): Promise<Permission[]> {
+  const cleanIds = Array.from(
+    new Set((permissionIds || []).map((x) => Number(x)).filter((x) => Number.isInteger(x) && x > 0))
+  );
+
+  // compute diff vs existing
+  const existing = await RolePermission.findAll({
+    where: { role_id: roleId },
+    attributes: ["permission_id"]
+  });
+  const current = new Set(existing.map((rp) => rp.get("permission_id") as number));
+  const next = new Set(cleanIds);
+
+  const toAdd: number[] = [];
+  const toRemove: number[] = [];
+  next.forEach((pid) => { if (!current.has(pid)) toAdd.push(pid); });
+  current.forEach((pid) => { if (!next.has(pid)) toRemove.push(pid); });
+
+  // apply in a transaction
+  await sequelize.transaction(async (t) => {
+    if (toAdd.length) {
+      await RolePermission.bulkCreate(
+        toAdd.map((pid) => ({ role_id: roleId, permission_id: pid })),
+        { ignoreDuplicates: true, transaction: t }
+      );
+    }
+    if (toRemove.length) {
+      await RolePermission.destroy({
+        where: { role_id: roleId, permission_id: toRemove } as any,
+        transaction: t
+      });
+    }
+  });
+
+  // return updated set
+  const updated = await Permission.findAll({
+    attributes: ["id", "code", "name"],
+    include: [
+      {
+        association: Permission.associations.roles!,
+        attributes: [],
+        through: { attributes: [] },
+        where: { id: roleId },
+        required: true
+      }
+    ],
+    order: [["id", "ASC"]]
+  });
+
+  return updated;
 }

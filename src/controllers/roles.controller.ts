@@ -4,8 +4,6 @@
  */
 import { Request, Response } from 'express';
 import Role from '@/models/Role';
-import Permission from '@/models/Permission';
-import User from '@/models/User';
 import { roleCode, toSystemCode } from '@/utils/rbac';
 import { assignRoleToUser, revokeRoleFromUser, attachPermissionToRole, detachPermissionFromRole } from '@/services/rbac.service';
 

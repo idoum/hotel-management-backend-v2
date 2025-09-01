@@ -14,7 +14,8 @@ import ratePlansRoutes from '@/routes/rate-plans.routes';
 import ratesRoutes from '@/routes/rates.routes';
 import availabilityRoutes from '@/routes/availability.routes';
 import reservationsRoutes from '@/routes/reservations.routes';
-
+import usersRoutes from '@/routes/users.routes';
+ 
 const router = Router();
 
 function buildRouter() {
@@ -29,6 +30,8 @@ function buildRouter() {
   router.use('/rates', ratesRoutes);
   router.use('/availability', availabilityRoutes);
   router.use('/reservations', reservationsRoutes);
+  router.use('/users', usersRoutes);
+
   return router;
 }
 

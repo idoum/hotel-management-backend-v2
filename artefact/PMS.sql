@@ -1,0 +1,242 @@
+-- hotel_management_v2.room_types definition
+
+CREATE TABLE `room_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `description` text DEFAULT NULL,
+  `features` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`features`)),
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  UNIQUE KEY `code_2` (`code`),
+  UNIQUE KEY `code_3` (`code`),
+  UNIQUE KEY `code_4` (`code`),
+  UNIQUE KEY `code_5` (`code`),
+  UNIQUE KEY `code_6` (`code`),
+  UNIQUE KEY `code_7` (`code`),
+  UNIQUE KEY `code_8` (`code`),
+  UNIQUE KEY `code_9` (`code`),
+  UNIQUE KEY `code_10` (`code`),
+  UNIQUE KEY `code_11` (`code`),
+  UNIQUE KEY `code_12` (`code`),
+  UNIQUE KEY `code_13` (`code`),
+  UNIQUE KEY `code_14` (`code`),
+  UNIQUE KEY `code_15` (`code`),
+  UNIQUE KEY `code_16` (`code`),
+  UNIQUE KEY `code_17` (`code`),
+  UNIQUE KEY `code_18` (`code`),
+  UNIQUE KEY `code_19` (`code`),
+  UNIQUE KEY `code_20` (`code`),
+  UNIQUE KEY `code_21` (`code`),
+  UNIQUE KEY `code_22` (`code`),
+  UNIQUE KEY `code_23` (`code`),
+  UNIQUE KEY `code_24` (`code`),
+  UNIQUE KEY `code_25` (`code`),
+  UNIQUE KEY `code_26` (`code`),
+  UNIQUE KEY `code_27` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.reservations definition
+
+CREATE TABLE `reservations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(30) NOT NULL,
+  `guest_name` varchar(150) DEFAULT NULL,
+  `guest_email` varchar(190) DEFAULT NULL,
+  `guest_phone` varchar(50) DEFAULT NULL,
+  `check_in` date NOT NULL,
+  `check_out` date NOT NULL,
+  `status` enum('pending','confirmed','cancelled','checked_in','checked_out') NOT NULL DEFAULT 'pending',
+  `currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `amount_total` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `source` varchar(30) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  UNIQUE KEY `code_2` (`code`),
+  UNIQUE KEY `code_3` (`code`),
+  UNIQUE KEY `code_4` (`code`),
+  UNIQUE KEY `code_5` (`code`),
+  UNIQUE KEY `code_6` (`code`),
+  UNIQUE KEY `code_7` (`code`),
+  UNIQUE KEY `code_8` (`code`),
+  UNIQUE KEY `code_9` (`code`),
+  UNIQUE KEY `code_10` (`code`),
+  UNIQUE KEY `code_11` (`code`),
+  UNIQUE KEY `code_12` (`code`),
+  UNIQUE KEY `code_13` (`code`),
+  UNIQUE KEY `code_14` (`code`),
+  UNIQUE KEY `code_15` (`code`),
+  UNIQUE KEY `code_16` (`code`),
+  UNIQUE KEY `code_17` (`code`),
+  UNIQUE KEY `code_18` (`code`),
+  UNIQUE KEY `code_19` (`code`),
+  UNIQUE KEY `code_20` (`code`),
+  UNIQUE KEY `code_21` (`code`),
+  UNIQUE KEY `code_22` (`code`),
+  UNIQUE KEY `code_23` (`code`),
+  UNIQUE KEY `code_24` (`code`),
+  UNIQUE KEY `code_25` (`code`),
+  UNIQUE KEY `code_26` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.rooms definition
+
+CREATE TABLE `rooms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `number` varchar(20) NOT NULL,
+  `floor` int(11) DEFAULT NULL,
+  `room_type_id` int(10) unsigned NOT NULL,
+  `status` enum('vacant','occupied','ooo','oos') NOT NULL DEFAULT 'vacant',
+  `out_of_service_reason` varchar(255) DEFAULT NULL,
+  `oos_since` datetime DEFAULT NULL,
+  `features` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`features`)),
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `number` (`number`),
+  UNIQUE KEY `number_2` (`number`),
+  UNIQUE KEY `number_3` (`number`),
+  UNIQUE KEY `number_4` (`number`),
+  UNIQUE KEY `number_5` (`number`),
+  UNIQUE KEY `number_6` (`number`),
+  UNIQUE KEY `number_7` (`number`),
+  UNIQUE KEY `number_8` (`number`),
+  UNIQUE KEY `number_9` (`number`),
+  UNIQUE KEY `number_10` (`number`),
+  UNIQUE KEY `number_11` (`number`),
+  UNIQUE KEY `number_12` (`number`),
+  UNIQUE KEY `number_13` (`number`),
+  UNIQUE KEY `number_14` (`number`),
+  UNIQUE KEY `number_15` (`number`),
+  UNIQUE KEY `number_16` (`number`),
+  UNIQUE KEY `number_17` (`number`),
+  UNIQUE KEY `number_18` (`number`),
+  UNIQUE KEY `number_19` (`number`),
+  UNIQUE KEY `number_20` (`number`),
+  UNIQUE KEY `number_21` (`number`),
+  UNIQUE KEY `number_22` (`number`),
+  UNIQUE KEY `number_23` (`number`),
+  UNIQUE KEY `number_24` (`number`),
+  UNIQUE KEY `number_25` (`number`),
+  UNIQUE KEY `number_26` (`number`),
+  UNIQUE KEY `number_27` (`number`),
+  KEY `room_type_id` (`room_type_id`),
+  CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.rate_plans definition
+
+CREATE TABLE `rate_plans` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `occupancy_pricing` tinyint(1) NOT NULL DEFAULT 1,
+  `refundable` tinyint(1) NOT NULL DEFAULT 1,
+  `policy` text DEFAULT NULL,
+  `room_type_id` int(10) unsigned DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  UNIQUE KEY `code_2` (`code`),
+  UNIQUE KEY `code_3` (`code`),
+  UNIQUE KEY `code_4` (`code`),
+  UNIQUE KEY `code_5` (`code`),
+  UNIQUE KEY `code_6` (`code`),
+  UNIQUE KEY `code_7` (`code`),
+  UNIQUE KEY `code_8` (`code`),
+  UNIQUE KEY `code_9` (`code`),
+  UNIQUE KEY `code_10` (`code`),
+  UNIQUE KEY `code_11` (`code`),
+  UNIQUE KEY `code_12` (`code`),
+  UNIQUE KEY `code_13` (`code`),
+  UNIQUE KEY `code_14` (`code`),
+  UNIQUE KEY `code_15` (`code`),
+  UNIQUE KEY `code_16` (`code`),
+  UNIQUE KEY `code_17` (`code`),
+  UNIQUE KEY `code_18` (`code`),
+  UNIQUE KEY `code_19` (`code`),
+  UNIQUE KEY `code_20` (`code`),
+  UNIQUE KEY `code_21` (`code`),
+  UNIQUE KEY `code_22` (`code`),
+  UNIQUE KEY `code_23` (`code`),
+  UNIQUE KEY `code_24` (`code`),
+  UNIQUE KEY `code_25` (`code`),
+  UNIQUE KEY `code_26` (`code`),
+  KEY `room_type_id` (`room_type_id`),
+  CONSTRAINT `rate_plans_ibfk_1` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.reservation_rooms definition
+
+CREATE TABLE `reservation_rooms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `reservation_id` int(10) unsigned NOT NULL,
+  `room_type_id` int(10) unsigned NOT NULL,
+  `room_id` int(10) unsigned DEFAULT NULL,
+  `rate_plan_id` int(10) unsigned DEFAULT NULL,
+  `adults` int(10) unsigned NOT NULL DEFAULT 2,
+  `children` int(10) unsigned NOT NULL DEFAULT 0,
+  `qty` int(10) unsigned NOT NULL DEFAULT 1,
+  `price_per_night` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`price_per_night`)),
+  `amount` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservation_id` (`reservation_id`),
+  KEY `room_type_id` (`room_type_id`),
+  KEY `room_id` (`room_id`),
+  KEY `rate_plan_id` (`rate_plan_id`),
+  CONSTRAINT `reservation_rooms_ibfk_101` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reservation_rooms_ibfk_102` FOREIGN KEY (`room_type_id`) REFERENCES `room_types` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `reservation_rooms_ibfk_103` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `reservation_rooms_ibfk_104` FOREIGN KEY (`rate_plan_id`) REFERENCES `rate_plans` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.rate_restrictions definition
+
+CREATE TABLE `rate_restrictions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rate_plan_id` int(10) unsigned NOT NULL,
+  `date` date NOT NULL,
+  `min_stay` int(10) unsigned DEFAULT NULL,
+  `max_stay` int(10) unsigned DEFAULT NULL,
+  `cta` tinyint(1) DEFAULT NULL,
+  `ctd` tinyint(1) DEFAULT NULL,
+  `advance_min` int(10) unsigned DEFAULT NULL,
+  `advance_max` int(10) unsigned DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rate_plan_id` (`rate_plan_id`),
+  CONSTRAINT `rate_restrictions_ibfk_1` FOREIGN KEY (`rate_plan_id`) REFERENCES `rate_plans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- hotel_management_v2.rate_plan_prices definition
+
+CREATE TABLE `rate_plan_prices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rate_plan_id` int(10) unsigned NOT NULL,
+  `date` date NOT NULL,
+  `price_base` decimal(10,2) NOT NULL,
+  `price_extra_adult` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `price_extra_child` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `closed` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rate_plan_id` (`rate_plan_id`),
+  CONSTRAINT `rate_plan_prices_ibfk_1` FOREIGN KEY (`rate_plan_id`) REFERENCES `rate_plans` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
